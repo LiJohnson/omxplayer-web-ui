@@ -1,0 +1,27 @@
+{
+  "name": "omxplayer-web-ui",
+  "version": "1.0.0",
+  "authors": [
+    "LiJohnson <598420668@163.com>"
+  ],
+  "description": "a web ui control for omxplayer( on raspberry)",
+  "main": "owu.css",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "omxplayer"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "bootstrap": "~3.3.1"
+  }
+}
