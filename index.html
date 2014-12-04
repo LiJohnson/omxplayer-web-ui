@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>omxplayer-web-ui</title>
+	<link rel="stylesheet" href="/static/css/bootstrap.css">
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="/static/js/jquery.js"></script>
+	<script src="/static/js/bootstrap.js"></script>
+	<script>
+	$(function(){
+		var socket = io();
+		var getItem = function(name , type){
+			var li = "<li data-name='"+name+"'>";
+			li += ("<i class='glyphicon glyphicon-plus glyphicon-"+type+"'></i>");
+			li += "<small>" + name +"</small>";
+			li += "</li>";
+			return li;
+		};
+
+		socket.on('control', function(data){
+			var $html = $(".control-item");
+			$.each(data,function(k,v) {
+				$html.append(getItem(k,v));
+			});
+			$html.append(getItem('play','play'))
+		});
+
+		$(document).on("click","li[data-name]",function(){
+			var data = $(this).data();
+			data.file = $('input[name=file]').val();
+			socket.emit("control",data);
+		});
+	});
+	</script>
+	<style type="text/css">
+	.control-item li{
+		width: 125px;
+		height: 125px;
+		display: list-item;
+		float: left;
+		border: 1px solid #ddd;
+		text-align: center;
+		cursor: pointer;
+	}
+	.control-item li .glyphicon{
+		font-size: 100px;
+		line-height: 125px;
+	}
+	.control-item li:hover{
+		background: #ccc;
+	}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-offset-3 col-md-6"  >
+				<ul class="list-unstyled control-item" >
+				</ul>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<input type="text" name="file" class="form-control" *>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
