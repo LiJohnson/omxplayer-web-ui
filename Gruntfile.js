@@ -78,7 +78,7 @@ module.exports = function(grunt) {
 							type = "fonts";
 						}
 						return type;
-						return [component,type].join("/");
+						//return [component,type].join("/");
 					},
 					//layout: 'byType',
 					install: true,
