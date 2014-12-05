@@ -13,7 +13,7 @@
 		var getItem = function(name , type){
 			var li = "<li data-name='"+name+"'>";
 			li += ("<i class='glyphicon glyphicon-plus glyphicon-"+type+"'></i>");
-			li += "<small>" + name +"</small>";
+			li += "<p><small>" + name +"</small></p>";
 			li += "</li>";
 			return li;
 		};
@@ -30,6 +30,7 @@
 			var data = $(this).data();
 			data.file = $('input[name=file]').val();
 			socket.emit("control",data);
+			$("input[name=file]").val("");
 		});
 	});
 	</script>
@@ -45,7 +46,6 @@
 	}
 	.control-item li .glyphicon{
 		font-size: 100px;
-		line-height: 125px;
 	}
 	.control-item li:hover{
 		background: #ccc;

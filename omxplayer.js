@@ -1,6 +1,4 @@
-var exec = require('child_process').exec,
-EventEmitter = require('events').EventEmitter,
-  util = require('util');
+var exec = require('child_process').exec;
 
 //base on https://github.com/xat/omxctrl/blob/master/omxctrl.js
 var keys = {
@@ -40,20 +38,16 @@ var omxplayer = function(file,option){
 	};
 	var cur = 0;
 	var state = STATE.STOP;
-	this.p ;
+	
 	var init = function(){
 		var file = playList[cur];
 
 		if( !file )return;
 
-		if( process && process.connected ){
-			process.kill();
-			exec('killall omxplayer');
-			exec('killall omxplayer.bin');
-			state = STATE.STOP
-		}
-
-		$this.p=process = exec('omxplayer ' + (option?option:'') + ' "'+file+'"');
+		$this.stop();
+		
+		process = exec('omxplayer ' + (option?option:'') + ' "'+file+'"');
+		
 		state = STATE.PLAYING;
 
 		'close,exit,error'.split(',').forEach(function(e){
@@ -78,6 +72,7 @@ var omxplayer = function(file,option){
 			file = [file];
 		}
 
+
 		if(!file){
 			return this.pause();
 		}
@@ -95,13 +90,12 @@ var omxplayer = function(file,option){
 };
 omxplayer.KEY = keys;
 
-util.inherits(omxplayer, EventEmitter);
 for( var name in keys  ){
 	(function(name,key){
 		console.log(name,key)
-		omxplayer.prototype["shi"+name] = function(){
+		omxplayer.prototype[name] = function(){
 			this.sendKey(key)
 		}
 	})(name,keys[name]);
 }
-module.exports = omxplayer;
+module.exports = new omxplayer();

@@ -46,9 +46,9 @@ io.on("connection",function(socket){
 	socket.on("control",function(action){
 		
 		if( action.name == 'play' ){
-			omxctrl.play(action.file || file);
+			omxplayer.play(action.file);
 		}else{
-			omxctrl[action.name]();
+			omxplayer[action.name]();
 		}
 	});
 })
