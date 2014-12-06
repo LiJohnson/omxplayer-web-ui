@@ -1,8 +1,15 @@
-var isListening = false;
-
+var isListening = localStorage.isListening == 'true';
+	
 var get = function(action,data){
+	data = (function(data){
+		var tmp = [];
+		for( var i in data ){
+			tmp.push(encodeURIComponent(i)+"="+encodeURIComponent(data[i]));
+		}
+		return tmp.join("&");
+	})(data||{});
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET",localStroage.host+"/action/"+action);
+	xhr.open("GET",localStorage.host+"/action/"+action+"?"+data);
 	xhr.send(data||null);
 };
 
@@ -15,11 +22,11 @@ chrome.webRequest.onResponseStarted.addListener(function(data){
 			get("play",{file:data.url})
 		}
 	}
-
+	console.log(data.type,data);
 	return data;
 }
 ,{
-	urls: ["<all_urls>"]
+	urls: ["*://*.baidu.com/*","*://*.xiami.com/*","*://*.douban.com/*"]
 });
 
 chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {

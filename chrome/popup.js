@@ -20,4 +20,4 @@ listening.onchange = function(){
 };
 
 updateListening(localStorage.listening == "true");
-update();
+updateHost();
