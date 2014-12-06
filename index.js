@@ -25,17 +25,20 @@ var control = {
 //seekFastBackward: "\x5B\x42"
 };
 
-var file = "http://mr3.douban.com/201412040332/8bb51559e63654163053d64a28d79519/view/song/small/p753643.mp4";
+var vol = 0;
 
 var handleControl = function(action){
+	if( action.name == 'decreaseVolume' )vol -= 300;
+	if( action.name == 'increaseVolume' )vol += 300;
+	if( action.name == 'stop' )vol = 0;
+
 	if( action.name == 'play' ){
-		omxplayer.play(action.file,[]);
+		omxplayer.play(action.file,["--vol " + vol ]);
 	}else{
 		omxplayer[action.name]();
 	}
 };
 
-//omxctrl.play(file);
 
 app.get("/",function(req,res){	
 	var file = __dirname + "/index.html";
@@ -44,7 +47,7 @@ app.get("/",function(req,res){
 
 app.get("/static/*",function(req,res){
 	var file = __dirname + "/lib" + req._parsedUrl.pathname.replace(/^\/?static/,'');
-	console.log(file);
+	//console.log(file);
 	res.sendFile(file);
 });
 
@@ -61,12 +64,15 @@ io.on("connection",function(socket){
 });
 
 omxplayer.on("playing",function(file){
-	"stdout,stderr".split(',', function(std){
-		omxplayer.player[std].on("data",function(data){
-			console.log( std + " data " + data);
-		});
-	});
 	console.log("playing " + file);
+	console.log("vol " + vol);
+	setTimeout(function(){
+		"data,message,ended".split(",").forEach(function(e){
+			omxplayer.player.stdout.on(e,function(data){
+				console.log(e,data);
+			});
+		});
+	},3000)
 });
 
 server.listen(9191,function(){
