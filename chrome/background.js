@@ -1,26 +1,30 @@
-var toggle = 0;
-var listener = function(data){
-	if( data.type.match(/audio|video/) ){
-		console.log(data.url);
-	}
-	if( data.url.match(/mp[34]/i) ){
-		console.log(data.url);
-	}
-	console.log(data);
-	return data;
+var isListening = false;
 
+var get = function(action,data){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET",localStroage.host+"/action/"+action);
+	xhr.send(data||null);
 };
 
-chrome.browserAction.onClicked.addListener(function(e) {
-	toggle = (toggle+1)%2;
-	if( toggle ){
-		chrome.webRequest.onResponseStarted.addListener(listener,{
-			urls: ["<all_urls>"]
-		});
-		chrome.browserAction.setTitle({title:"no"});
-	}else{
-		chrome.webRequest.onResponseStarted.removeListener(listener);
-		chrome.browserAction.setTitle({title:"off"});
+chrome.webRequest.onResponseStarted.addListener(function(data){
+	if( !isListening )return;
 
+	if( data.type.match(/audio|video|stream|other/) ){
+		if( data.url.match(/\.mp[34]/i) ){
+			console.log(data,data.url);
+			get("play",{file:data.url})
+		}
+	}
+
+	return data;
+}
+,{
+	urls: ["<all_urls>"]
+});
+
+chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
+	isListening = msg.listening;
+	if( !msg.listening ){
+		get("stop");
 	}
 });
