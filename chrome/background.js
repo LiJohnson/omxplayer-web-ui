@@ -26,7 +26,8 @@ chrome.webRequest.onResponseStarted.addListener(function(data){
 	return data;
 }
 ,{
-	urls: ["*://*.baidu.com/*","*://*.xiami.com/*","*://*.douban.com/*"]
+	urls: ["*://*.baidu.com/*","*://*.xiami.com/*","*://*.douban.com/*"],
+	types:["other","object"]
 });
 
 chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
