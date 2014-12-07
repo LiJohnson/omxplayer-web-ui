@@ -2,7 +2,7 @@ var app = require("express")();
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
 var omxplayer = require("omxctrl");
-
+var exec = require('child_process').exec;
 var control = {
 //decreaseSpeed: '1',
 //increaseSpeed: '2',
@@ -33,6 +33,10 @@ var handleControl = function(action){
 	if( action.name == 'stop' )vol = 0;
 
 	if( action.name == 'play' ){
+		if( action.file ){
+			omxplayer.stop();
+			exec('killall omxplayer.bin');
+		}
 		omxplayer.play(action.file,["--vol " + vol ]);
 	}else{
 		omxplayer[action.name]();
