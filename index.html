@@ -33,6 +33,10 @@
 			data.file = $('input[name=file]').val();
 			socket.emit("control",data);
 			$("input[name=file]").val("");
+		}).on("keypress","input[name=file]",function(e){
+			if(e.keyCode != 13)return;
+			socket.emit("control",{name:"play",file:$(this).val()});
+			$(this).val("");
 		});
 	});
 	</script>
