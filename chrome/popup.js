@@ -1,6 +1,6 @@
 
 var updateHost = function(){
-	host.value = host.value || localStorage.host;
+	host.value = host.value || localStorage.host || "";
 	controller.src = localStorage.host = host.value;
 	return false;
 }
